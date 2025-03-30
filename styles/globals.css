@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+:root {
+  --background: #141414;  /* Negro oscuro */
+  --foreground: #e5e5e5;  /* Texto en gris claro */
+  --primary: #e50914;     /* Rojo de Netflix */
+  --secondary: #b3b3b3;   /* Gris más oscuro */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #000000;  /* Negro puro en modo oscuro */
+    --foreground: #ffffff;  /* Blanco puro para más contraste */
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Botones estilo Netflix */
+.button {
+  background: var(--primary);
+  color: white;
+  font-weight: bold;
+  padding: 12px 24px;
+  border-radius: 4px;
+  transition: 0.3s ease-in-out;
+}
+
+.button:hover {
+  background: #b20710; /* Rojo más oscuro al pasar el mouse */
+}
+
+/* Tarjetas de contenido (series/películas) */
+.card {
+  background: #222;  /* Fondo oscuro para tarjetas */
+  border-radius: 8px;
+  padding: 16px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.05); /* Efecto de zoom al pasar el mouse */
+}
+
+/* Efecto de desenfoque en el fondo */
+.hero {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), var(--background));
+  background-size: cover;
+  background-position: center;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
