@@ -1,6 +1,5 @@
-import Image from "next/image";
+import ContentCard from "../ContentCard/ContentCard";
 import { ContentItem } from "../ContentItem/ContentItem";
-
 
 interface ContentCategoryProps {
   categoryTitle: string;
@@ -14,14 +13,11 @@ export default function ContentCategory({ categoryTitle, contentItems }: Content
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
         {contentItems.map((item) => (
           <div key={item.id} className="relative">
-            <Image
-              src={item.imageUrl}
-              alt={item.title}
-              width={200}
-              height={300}
-              className="w-full h-auto rounded-md object-cover"
+            <ContentCard
+              title={item.title}
+              description={item.description}
+              imageUrl={item.imageUrl}
             />
-            <div className="absolute top-0 left-0 right-0 bottom-0 bg-black opacity-40 rounded-md"></div>
           </div>
         ))}
       </div>
