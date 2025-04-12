@@ -57,10 +57,10 @@ export default function ContentCard({ title, description, imageUrl }: ContentCar
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton color="primary" aria-label="reproducir">
+        <IconButton color="primary" aria-label="Play">
           <PlayArrow />
         </IconButton>
-        <IconButton onClick={handleExpandClick}  color="primary" aria-expanded={expanded} aria-label="mostrar más" >
+        <IconButton onClick={handleExpandClick}  color="primary" aria-expanded={expanded} aria-label="View more" >
           <ExpandMore
             sx={{
               transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
