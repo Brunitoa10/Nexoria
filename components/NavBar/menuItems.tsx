@@ -7,7 +7,6 @@ export type MenuItem = {
     { label: "Home", path: "/" },
     { label: "Movies", path: "/Movies" },
     { label: "Series", path: "/Series" },
-    { label: "Novels", path: "/Novels" },
     { label: "Profile", path: "/Profile" },
   ];
   

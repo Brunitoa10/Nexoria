@@ -23,7 +23,7 @@ export default function ContentCard({ title, description, imageUrl }: ContentCar
         maxWidth: 345,
         backgroundColor: 'rgba(128, 2, 2, 0.47)',
         color: 'white',
-        borderRadius: 8,
+        
         boxShadow: '0 6px 15px rgb(255, 0, 0)',
         transition: 'all 0.3s ease',
         "&:hover": {
