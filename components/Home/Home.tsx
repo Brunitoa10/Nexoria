@@ -1,12 +1,33 @@
-import MoviesPage from "@/app/Movies/page";
-import SeriesPage from "@/app/Series/page";
+import ContentCategory from "@/components/Content/ContentCategory/ContentCategory";
+
+import { fetchPopularMovies } from "@/lib/tmdb/movies";
+import { TMDBMovie } from "@/types/tmdb/tmbMovie";
+import { ContentItem } from "../Content/ContentItem/ContentItem";
+import { fetchPopularSeries } from "@/lib/tmdb/series";
+import { TMDBTVShow } from "@/types/tmdb/tmbSeries";
 
 
-export default function Home() {
+export default async function MoviesPage() {
+  const movies: TMDBMovie[] = await fetchPopularMovies();
+  const series: TMDBTVShow[] = await fetchPopularSeries();
+ 
+  const contentItems: ContentItem[] = movies.map((movie) => ({
+    id: movie.id.toString(),
+    title: movie.title,
+    description: movie.overview,
+    imageUrl: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+  }));
+  const contentItemsSerie: ContentItem[] = series.map((serie) => ({
+    id: serie.id.toString(),
+    title: serie.name,
+    description: serie.overview,
+    imageUrl: `https://image.tmdb.org/t/p/w500${serie.poster_path}`,
+  }));
+
   return (
-    <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-black">
-      <MoviesPage/>
-      <SeriesPage/>
+    <div className="px-8 py-6">
+      <ContentCategory categoryTitle="Películas Populares" contentItems={contentItems} />
+      <ContentCategory categoryTitle="Series Populares" contentItems={contentItemsSerie} />
     </div>
   );
 }
