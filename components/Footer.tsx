@@ -56,7 +56,7 @@ export default function Footer() {
 
       {/* 📜 Derechos reservados */}
       <p className="text-center text-gray-500 text-sm">
-        © 2025 Technology Advance Solutions - Todos los derechos reservados
+        © 2025 Bruno Ariel Parisi - Todos los derechos reservados
       </p>
     </footer>
   );
