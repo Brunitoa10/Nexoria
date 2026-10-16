@@ -1,26 +1,36 @@
 "use client";
 
 import { Users } from "lucide-react";
-import { useState } from "react";
+import Link from "next/link";
+
+import Dropdown from "@/components/ui/Dropdown";
+import { USER_MENU } from "@/config/navigation";
+
+const itemClassName = "block w-full text-left hover:bg-gray-700 p-2 rounded";
 
 export default function UserMenu() {
-  const [showUserMenu, setShowUserMenu] = useState(false);
-
   return (
-    <div
-      className="relative cursor-pointer hover:text-red-600 transition"
-      onClick={() => setShowUserMenu(!showUserMenu)}
-    >
-      <Users className="w-6 h-6" />
+    <Dropdown label="Menú de usuario" widthClassName="w-44" trigger={<Users className="w-6 h-6" />}>
+      <ul>
+        {USER_MENU.map(({ label, icon, href, danger }) => {
+          const className = `${itemClassName} ${danger ? "text-red-500" : ""}`;
+          const content = `${icon} ${label}`;
 
-      {/* 🔽 Menú desplegable de usuario */}
-      {showUserMenu && (
-        <div className="absolute right-0 mt-3 w-40 bg-gray-800 shadow-lg rounded-md p-3 text-sm">
-          <p className="hover:bg-gray-700 p-2 rounded cursor-pointer">📄 Mi Perfil</p>
-          <p className="hover:bg-gray-700 p-2 rounded cursor-pointer">⚙️ Configuración</p>
-          <p className="hover:bg-gray-700 p-2 rounded cursor-pointer text-red-500">🚪 Cerrar Sesión</p>
-        </div>
-      )}
-    </div>
+          return (
+            <li key={label} role="menuitem">
+              {href ? (
+                <Link href={href} className={className}>
+                  {content}
+                </Link>
+              ) : (
+                <button type="button" className={className}>
+                  {content}
+                </button>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </Dropdown>
   );
 }

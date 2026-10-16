@@ -1,32 +1,43 @@
 "use client";
 
 import { BellRing } from "lucide-react";
-import { useState } from "react";
+
+import Dropdown from "@/components/ui/Dropdown";
+import type { AppNotification } from "@/data/notifications";
 
 interface NotificationMenuProps {
-  notificationsCount: number;
+  notifications: AppNotification[];
 }
 
-export default function NotificationMenu({ notificationsCount }: NotificationMenuProps) {
-  const [showNotifications, setShowNotifications] = useState(false);
+export default function NotificationMenu({ notifications }: NotificationMenuProps) {
+  const count = notifications.length;
 
   return (
-    <div
-      className="relative cursor-pointer hover:text-red-600 transition"
-      onClick={() => setShowNotifications(!showNotifications)}
+    <Dropdown
+      label={`Notificaciones (${count})`}
+      widthClassName="w-64"
+      trigger={
+        <>
+          <BellRing className="w-6 h-6" />
+          {count > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-600 text-xs font-bold px-1.5 py-0.5 rounded-full">
+              {count}
+            </span>
+          )}
+        </>
+      }
     >
-      <BellRing className="w-6 h-6" />
-      <span className="absolute -top-1 -right-1 bg-red-600 text-xs font-bold px-1.5 py-0.5 rounded-full">
-        {notificationsCount}
-      </span>
-
-      {showNotifications && (
-        <div className="absolute right-0 mt-3 w-64 bg-gray-800 shadow-lg rounded-md p-3 text-sm">
-          <p className="text-gray-300">📢 Nueva actualización disponible</p>
-          <p className="text-gray-300 mt-2">🔔 Mensaje de un amigo</p>
-          <p className="text-gray-300 mt-2">🎬 Nueva serie añadida</p>
-        </div>
+      {count === 0 ? (
+        <p className="text-gray-400">No tenés notificaciones</p>
+      ) : (
+        <ul className="space-y-2">
+          {notifications.map(({ id, icon, message }) => (
+            <li key={id} role="menuitem" className="text-gray-300">
+              {icon} {message}
+            </li>
+          ))}
+        </ul>
       )}
-    </div>
+    </Dropdown>
   );
 }

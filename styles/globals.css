@@ -1,20 +1,51 @@
 @import "tailwindcss";
 
-:root {
-  --background: #141414;
-  --foreground: #e5e5e5;
-  --primary: #e50914;
-  --secondary: #b3b3b3;
+/* Design tokens: se usan como clases (bg-ink, bg-surface, text-brand, etc.). */
+@theme {
+  --font-sans: var(--font-urbanist), ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #09090b;
+  --color-surface: #131317;
+  --color-surface-2: #1c1c22;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-muted: #a1a1aa;
+  --color-brand: #e50914;
+  --color-brand-strong: #ff1f2b;
+  --color-gold: #f5c518;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #000000;
-    --foreground: #ffffff;
-  }
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-ink);
+  color: #ececef;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-brand);
+  color: white;
+}
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

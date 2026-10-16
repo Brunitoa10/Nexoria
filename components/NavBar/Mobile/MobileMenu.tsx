@@ -1,17 +1,19 @@
 "use client";
 
-import { useMobileMenu } from "@/hooks/useMobileMenu";
+import { useToggle } from "@/hooks/useToggle";
+
 import { MobileMenuButton } from "./MobileMenuButton";
 import { MobileMenuList } from "./MobileMenuList";
 
+const MENU_ID = "mobile-menu";
 
 export default function MobileMenu() {
-  const { open, toggleMenu, closeMenu } = useMobileMenu();
+  const { isOpen, toggle, close } = useToggle();
 
   return (
     <div className="lg:hidden">
-      <MobileMenuButton open={open} onClick={toggleMenu} />
-      <MobileMenuList open={open} closeMenu={closeMenu} />
+      <MobileMenuButton open={isOpen} onClick={toggle} controlsId={MENU_ID} />
+      <MobileMenuList id={MENU_ID} open={isOpen} onNavigate={close} />
     </div>
   );
 }

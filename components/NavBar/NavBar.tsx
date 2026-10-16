@@ -1,23 +1,20 @@
-import "@/styles/globals.css";
 import Image from "next/image";
 import Link from "next/link";
+
+import { ROUTES } from "@/config/navigation";
+import { SITE_CONFIG } from "@/config/site";
+
 import DesktopMenu from "./Desktop/DesktopMenu";
 import MobileMenu from "./Mobile/MobileMenu";
 
 export default function Navbar() {
   return (
-    <nav className="p-4 transparent flex justify-between items-center">
-      <Link href="/">
-        <Image
-          src="https://7abby72f43.ufs.sh/f/r7k0vuzPmhf9N0yVrIeUaBZkmRvAHVL0juKwe321rnofypqI"
-          alt="Mi Portafolio"
-          width={140}
-          height={80}
-          className="cursor-pointer block"
-        />
+    <nav aria-label="Navegación principal" className="relative p-4 flex justify-between items-center">
+      <Link href={ROUTES.home} aria-label={`${SITE_CONFIG.name} - Inicio`}>
+        <Image src={SITE_CONFIG.logoUrl} alt={SITE_CONFIG.name} width={140} height={80} priority className="block" />
       </Link>
-      <DesktopMenu/>
-      <MobileMenu/>
+      <DesktopMenu />
+      <MobileMenu />
     </nav>
   );
 }

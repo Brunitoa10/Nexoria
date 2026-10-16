@@ -1,24 +1,55 @@
-const API_BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = process.env.TMDB_API_KEY;
+import "server-only";
 
-if (!API_KEY) {
-  throw new Error("TMDB_API_KEY no está definida en el entorno");
+import { TMDB_CONFIG } from "./config";
+
+export class TmdbError extends Error {
+  constructor(
+    message: string,
+    public readonly status?: number,
+    public readonly endpoint?: string,
+  ) {
+    super(message);
+    this.name = "TmdbError";
+  }
+
+  get isNotFound(): boolean {
+    return this.status === 404;
+  }
 }
 
-export async function fetchFromTMDB(endpoint: string, params: Record<string, string> = {}) {
-  const url = new URL(`${API_BASE_URL}/${endpoint}`);
-  url.searchParams.set("api_key", API_KEY as string);
-  url.searchParams.set("language", "es-ES");
+export type QueryParams = Record<string, string | number | undefined>;
+
+function getApiKey(): string {
+  const apiKey = process.env.TMDB_API_KEY;
+  if (!apiKey) {
+    throw new TmdbError("TMDB_API_KEY no está definida en el entorno (.env.local)");
+  }
+  return apiKey;
+}
+
+function buildUrl(endpoint: string, params: QueryParams): URL {
+  const url = new URL(`${TMDB_CONFIG.apiBaseUrl}/${endpoint}`);
+  url.searchParams.set("api_key", getApiKey());
+  url.searchParams.set("language", TMDB_CONFIG.language);
 
   for (const [key, value] of Object.entries(params)) {
-    url.searchParams.set(key, value);
+    if (value !== undefined && value !== "") url.searchParams.set(key, String(value));
   }
+  return url;
+}
 
-  const res = await fetch(url.toString());
+/**
+ * Único punto de acceso HTTP a TMDB (Single Responsibility).
+ * Genérico y tipado: quien lo llama indica qué forma espera recibir.
+ */
+export async function tmdbFetch<T>(endpoint: string, params: QueryParams = {}): Promise<T> {
+  const res = await fetch(buildUrl(endpoint, params), {
+    next: { revalidate: TMDB_CONFIG.revalidateSeconds },
+  });
 
   if (!res.ok) {
-    throw new Error(`Error al obtener datos de TMDB: ${res.statusText}`);
+    throw new TmdbError(`TMDB respondió ${res.status} ${res.statusText}`, res.status, endpoint);
   }
 
-  return res.json();
+  return res.json() as Promise<T>;
 }

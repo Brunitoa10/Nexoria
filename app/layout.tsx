@@ -1,31 +1,56 @@
-import Footer from "@/components/Footer";
-import Navbar from "@/components/NavBar/NavBar";
-import type { Metadata } from "next";
+import "@/styles/globals.css";
+
+import type { Metadata, Viewport } from "next";
 import { Urbanist } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
+import type { ReactNode } from "react";
 
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
+import { SITE_CONFIG } from "@/config/site";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
   variable: "--font-urbanist",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Nexoria",
-  description: "Pagina de novelas",
-  icons: {
-    icon: "https://7abby72f43.ufs.sh/f/r7k0vuzPmhf9yXmL1sE16HUAL57ORQ2MNv8coatwqIJCTVum",
+  title: {
+    default: `${SITE_CONFIG.name} · ${SITE_CONFIG.tagline}`,
+    template: `%s · ${SITE_CONFIG.name}`,
+  },
+  description: SITE_CONFIG.description,
+  applicationName: SITE_CONFIG.name,
+  authors: [{ name: SITE_CONFIG.author }],
+  icons: { icon: SITE_CONFIG.faviconUrl },
+  openGraph: {
+    type: "website",
+    siteName: SITE_CONFIG.name,
+    locale: "es_AR",
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  
+export const viewport: Viewport = {
+  themeColor: "#09090b",
+  colorScheme: "dark",
+};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es" className={urbanist.variable}>
-      <body className="antialiased">
-      <NextTopLoader showSpinner={false} color=" rgb(255, 0, 0)" />
+      <body className="flex min-h-screen flex-col">
+        <a
+          href="#contenido"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-black"
+        >
+          Saltar al contenido
+        </a>
+        <NextTopLoader showSpinner={false} color={SITE_CONFIG.brandColor} height={2} />
         <Navbar />
-        <main className="container mx-auto px-4">{children}</main>
+        <main id="contenido" className="flex-1">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

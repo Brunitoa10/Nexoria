@@ -1,77 +1,50 @@
 "use client";
 
-import { ExpandMore, PlayArrow } from '@mui/icons-material';
-import { Card, CardActions, CardContent, CardMedia, Collapse, IconButton, Typography } from '@mui/material';
-import { useState } from 'react';
+import { ExpandMore, PlayArrow } from "@mui/icons-material";
+import { Card, CardActions, CardContent, CardMedia, Collapse, IconButton, Typography } from "@mui/material";
+
+import { useToggle } from "@/hooks/useToggle";
+import type { ContentItem } from "@/types/content";
+
+import { cardSx, expandIconSx, mediaSx, titleSx } from "./ContentCard.styles";
 
 interface ContentCardProps {
-  title: string;
-  description: string;
-  imageUrl: string;
+  item: ContentItem;
 }
 
-export default function ContentCard({ title, description, imageUrl }: ContentCardProps) {
-  const [expanded, setExpanded] = useState(false);
+const NO_DESCRIPTION = "Sin descripción disponible.";
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+export default function ContentCard({ item }: ContentCardProps) {
+  const { title, description, imageUrl } = item;
+  const { isOpen: expanded, toggle } = useToggle();
 
   return (
-    <Card
-      sx={{
-        maxWidth: 345,
-        backgroundColor: 'rgba(128, 2, 2, 0.47)',
-        color: 'white',
-        
-        boxShadow: '0 6px 15px rgb(255, 0, 0)',
-        transition: 'all 0.3s ease',
-        "&:hover": {
-          transform: "scale(1.05)",
-          boxShadow: '0 12px 24px rgb(255, 0, 0)',
-        },
-      }}
-    >
-      <CardMedia
-        component="img"
-        alt={title}
-        sx={{
-            height: 200,
-            objectFit: 'cover',
-            borderTopLeftRadius: 8,
-            borderTopRightRadius: 8,
-            width: '100%',
-          }}
-        image={imageUrl}
-        title={title}
-      />
+    <Card sx={cardSx}>
+      <CardMedia component="img" image={imageUrl} alt={title} loading="lazy" sx={mediaSx} />
+
       <CardContent>
-        <Typography variant="h6" component="div" sx={{
-            fontWeight: 'bold',
-            fontSize: '1rem',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}>
+        <Typography variant="h6" component="h3" title={title} sx={titleSx}>
           {title}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
-        <IconButton color="primary" aria-label="Play">
+
+      <CardActions disableSpacing sx={{ mt: "auto" }}>
+        <IconButton color="primary" aria-label={`Reproducir ${title}`}>
           <PlayArrow />
         </IconButton>
-        <IconButton onClick={handleExpandClick}  color="primary" aria-expanded={expanded} aria-label="View more" >
-          <ExpandMore
-            sx={{
-              transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
-              transition: "transform 0.3s ease",
-            }}
-          />
+        <IconButton
+          onClick={toggle}
+          color="primary"
+          aria-expanded={expanded}
+          aria-label={expanded ? "Ver menos" : "Ver más"}
+        >
+          <ExpandMore sx={expandIconSx(expanded)} />
         </IconButton>
       </CardActions>
+
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent sx={{ display: 'block', paddingTop: 2 }}>
-          <Typography >{description}</Typography>
+        <CardContent sx={{ pt: 2 }}>
+          <Typography variant="body2">{description || NO_DESCRIPTION}</Typography>
         </CardContent>
       </Collapse>
     </Card>

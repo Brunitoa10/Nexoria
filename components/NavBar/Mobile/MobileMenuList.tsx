@@ -1,39 +1,34 @@
 "use client";
 
+import { motion, type Variants } from "framer-motion";
 
-import { menuVariants } from "@/components/Animation/AnimationMenuMobile";
-import { MobileMenuListProps } from "@/types/Mobile/MobileMenuListProps";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import menuItems from "../menuItems";
+import NavLinks from "../NavLinks";
 
+const menuVariants: Variants = {
+  hidden: { opacity: 0, height: 0 },
+  visible: { opacity: 1, height: "auto" },
+};
 
-export function MobileMenuList({ open, closeMenu }: MobileMenuListProps) {
+interface MobileMenuListProps {
+  id: string;
+  open: boolean;
+  onNavigate: () => void;
+}
+
+export function MobileMenuList({ id, open, onNavigate }: MobileMenuListProps) {
   return (
     <motion.div
+      id={id}
       variants={menuVariants}
       initial="hidden"
       animate={open ? "visible" : "hidden"}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="absolute top-16 left-0 w-full bg-gray-900 p-4 z-50 rounded-md shadow-lg overflow-hidden"
+      aria-hidden={!open}
+      className={`absolute top-16 left-0 w-full bg-gray-900 z-50 rounded-md shadow-lg overflow-hidden ${
+        open ? "p-4" : "pointer-events-none"
+      }`}
     >
-      <Stack direction="column" spacing={2}>
-        {menuItems.map(({ label, path }) => (
-          <Button
-            key={path}
-            variant="outlined"
-            color="primary"
-            component={Link}
-            href={path}
-            className="btn-navbar"
-            onClick={closeMenu}
-          >
-            {label}
-          </Button>
-        ))}
-      </Stack>
+      <NavLinks direction="column" onNavigate={onNavigate} />
     </motion.div>
   );
 }
